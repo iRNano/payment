@@ -3,8 +3,7 @@ import Tab from "./Tab";
 
 const Tabs = ({ children }) => {
   const [activeTab, setActiveTab] = useState(children[0].props.label);
-  console.log(children);
-  console.log(activeTab);
+
   return (
     <div className="tabs">
       <div className="ui secondary menu tab-list">

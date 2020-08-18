@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Products from "./Products";
 import Payment from "./Payment/Payment";
 import Terms from "./Terms/Terms";
+import { getDerivedStateFromProps } from "cleave.js/react";
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
@@ -19,21 +20,34 @@ const Checkout = () => {
     term: "",
   });
 
-  const formValid = (formErrors) => {
+  const [isSuccess, setIsSucess] = useState(null);
+
+  let success = isSuccess === true ? "success" : "";
+  let error = isSuccess === false ? "error" : "";
+
+  //Check if form is valid
+
+  const formValid = (formErrors, formData) => {
     let valid = true;
 
+    //Check form errors objects
     Object.values(formErrors).forEach((val) => {
-      console.log(val.length);
       val.length > 0 && (valid = false);
-      console.log(valid);
+    });
+    //check form data if has values
+    Object.values(formData).forEach((val) => {
+      val == null && (valid = false);
     });
 
     return valid;
   };
+
+  //On submit form
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (formValid(formErrors)) {
+    if (formValid(formErrors, formData)) {
+      setIsSucess(true);
       console.log(`
       --SUBMITTING--
       Card Number: ${formData.number}
@@ -43,8 +57,11 @@ const Checkout = () => {
       Terms: ${formData.term}
       
       `);
+      console.log(isSuccess);
     } else {
+      setIsSucess(false);
       console.log(`FORM INVALID  - DISPLAY ERROR MESSAGE`);
+      console.log(isSuccess);
     }
   };
 
@@ -52,16 +69,47 @@ const Checkout = () => {
     <div className="ui container">
       <h1 className="ui header">Checkout</h1>
       <Products />
-      <form className="ui form" onSubmit={(e) => onSubmit(e)} noValidate>
-        <Payment setFormData={setFormData} formData={formData} />
-        <Terms setFormData={setFormData} formData={formData} />
+      <form
+        className={`ui form ${success} ${error}`}
+        onSubmit={(e) => onSubmit(e)}
+        noValidate
+      >
+        <Payment
+          setFormData={setFormData}
+          formData={formData}
+          formErrors={formErrors}
+          setFormErrors={setFormErrors}
+          success={success}
+          error={error}
+        />
+        <Terms
+          setFormData={setFormData}
+          formData={formData}
+          formErrors={formErrors}
+          setFormErrors={setFormErrors}
+          success={success}
+          error={error}
+        />
         <div>
+          {isSuccess ? (
+            <div className={`ui ${success} message  `}>
+              <div className="header">Form Completed</div>
+              <p>You're all signed up for the newsletter.</p>
+            </div>
+          ) : null}
+          {isSuccess === false ? (
+            <div className={`ui ${error} message  `}>
+              <div className="header">Error Encountered</div>
+
+              <p>Please check your inputs.</p>
+            </div>
+          ) : null}
+
           <button className="fluid ui orange button" type="submit">
             Place Order
           </button>
         </div>
       </form>
-      {console.log(formData)}
     </div>
   );
 };

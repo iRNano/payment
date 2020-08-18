@@ -4,14 +4,67 @@ import cvv from "../../../../assets/cvv.png";
 import Popup from "../../../../components/Popup";
 import { Input } from "semantic-ui-react";
 
-const CreditCard = ({ setFormData, formData }) => {
+const CreditCard = ({
+  setFormData,
+  formData,
+  formErrors,
+  setFormErrors,
+  success,
+  error,
+}) => {
   const onChange = (e) => {
+    e.preventDefault();
+
+    const { name, value } = e.target;
+
+    let nameRegex = /^[a-zA-Z ]*$/;
+
+    switch (name) {
+      case "number":
+        setFormErrors({
+          ...formErrors,
+          number:
+            value.length < 18 || value === "" ? "Invalid Card Number" : "",
+        });
+        break;
+      case "cvc":
+        setFormErrors({
+          ...formErrors,
+          cvc:
+            value.length > 3 || value === "" ? "maximum of three integers" : "",
+        });
+        break;
+      case "expiry":
+        setFormErrors({
+          ...formErrors,
+          expiry:
+            value.length !== 5 || value === "" ? "Invalid Date Format" : "",
+        });
+        break;
+      case "name":
+        console.log(nameRegex.test(value));
+        setFormErrors({
+          ...formErrors,
+          name:
+            !nameRegex.test(value) || value.length < 3 ? "Invalid name" : "",
+        });
+
+        break;
+      default:
+        break;
+    }
+
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   return (
     <div className="ui container">
       <div className="two fields">
-        <div className="required field">
+        <div
+          className={`required field ${
+            formErrors.number.length > 0 ? "error" : ""
+          }`}
+        >
           <label>Card number</label>
           <div className="ui icon input">
             <Cleave
@@ -22,6 +75,9 @@ const CreditCard = ({ setFormData, formData }) => {
             />
             <i className="credit card outline icon"></i>
           </div>
+          {formErrors.number.length > 0 && (
+            <span className="errorMessage">{formErrors.number}</span>
+          )}
         </div>
         <div className="required two wide field">
           <label>CVV/CVC</label>
@@ -33,6 +89,9 @@ const CreditCard = ({ setFormData, formData }) => {
             />
             <Popup />
           </div>
+          {formErrors.cvc.length > 0 && (
+            <span className="errorMessage">{formErrors.cvc}</span>
+          )}
         </div>
       </div>
       <div className="required field">
@@ -45,10 +104,16 @@ const CreditCard = ({ setFormData, formData }) => {
             onChange={onChange}
           />
         </div>
+        {formErrors.expiry.length > 0 && (
+          <span className="errorMessage">{formErrors.expiry}</span>
+        )}
       </div>
-      <div className="required field">
+      <div className="required field ">
         <label>Cardholder's name</label>
         <input type="text" onChange={onChange} name="name"></input>
+        {formErrors.name.length > 0 && (
+          <span className="errorMessage">{formErrors.name}</span>
+        )}
       </div>
     </div>
   );
