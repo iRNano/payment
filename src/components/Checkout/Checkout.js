@@ -36,7 +36,7 @@ const Checkout = () => {
     });
     //check form data if has values
     Object.values(formData).forEach((val) => {
-      val == null && (valid = false);
+      val == null || (val == false && (valid = false));
     });
 
     return valid;

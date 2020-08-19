@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Cleave from "cleave.js/react";
 import cvv from "../../../../assets/cvv.png";
-import Popup from "../../../../components/Popup";
-import { Input } from "semantic-ui-react";
+import CvvPopup from "../../../../components/Popup";
+import { Input, Popup, Icon } from "semantic-ui-react";
+import "./CreditCard.css";
 
-const CreditCard = ({
-  setFormData,
-  formData,
-  formErrors,
-  setFormErrors,
-  success,
-  error,
-}) => {
+const CreditCard = ({ setFormData, formData, formErrors, setFormErrors }) => {
+  // const cvvPopup = useRef(null);
+
+  // useEffect(() => {});
+
+  const mouseOverHandler = () => {
+    console.log("mouseover!");
+  };
   const onChange = (e) => {
     e.preventDefault();
 
@@ -60,6 +61,7 @@ const CreditCard = ({
   return (
     <div className="ui container">
       <div className="two fields">
+        {/* ///Card number} */}
         <div
           className={`required field ${
             formErrors.number.length > 0 ? "error" : ""
@@ -79,6 +81,8 @@ const CreditCard = ({
             <span className="errorMessage">{formErrors.number}</span>
           )}
         </div>
+
+        {/* CVC */}
         <div
           className={`required two wide field ${
             formErrors.cvc.length > 0 ? "error" : ""
@@ -91,13 +95,31 @@ const CreditCard = ({
               options={{ blocks: [3], numericOnly: true }}
               onChange={onChange}
             />
-            <Popup />
+
+            <Popup
+              trigger={
+                <i
+                  className="question circle outline icon"
+                  onMouseOver={mouseOverHandler}
+                ></i>
+              }
+              content="test"
+            />
+            <i
+              // ref="cvvPopup"
+              className="question circle outline icon"
+              onMouseOver={mouseOverHandler}
+            ></i>
+            {/* <CvvPopup /> */}
           </div>
+
           {formErrors.cvc.length > 0 && (
             <span className="errorMessage">{formErrors.cvc}</span>
           )}
         </div>
       </div>
+
+      {/* Expiry */}
       <div
         className={`required field ${
           formErrors.expiry.length > 0 ? "error" : ""
@@ -116,6 +138,8 @@ const CreditCard = ({
           <span className="errorMessage">{formErrors.expiry}</span>
         )}
       </div>
+
+      {/* Name */}
       <div
         className={`required field ${
           formErrors.name.length > 0 ? "error" : ""
