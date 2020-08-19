@@ -96,7 +96,7 @@ const CreditCard = ({ setFormData, formData, formErrors, setFormErrors }) => {
               onChange={onChange}
             />
 
-            <Popup
+            {/* <Popup
               trigger={
                 <i
                   className="question circle outline icon"
@@ -109,8 +109,10 @@ const CreditCard = ({ setFormData, formData, formErrors, setFormErrors }) => {
               // ref="cvvPopup"
               className="question circle outline icon"
               onMouseOver={mouseOverHandler}
-            ></i>
-            {/* <CvvPopup /> */}
+            ></i> */}
+
+            {/* pointer-events are disabled on form fields */}
+            <CvvPopup />
           </div>
 
           {formErrors.cvc.length > 0 && (
