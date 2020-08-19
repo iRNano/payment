@@ -79,7 +79,11 @@ const CreditCard = ({
             <span className="errorMessage">{formErrors.number}</span>
           )}
         </div>
-        <div className="required two wide field">
+        <div
+          className={`required two wide field ${
+            formErrors.cvc.length > 0 ? "error" : ""
+          }`}
+        >
           <label>CVV/CVC</label>
           <div className="ui icon input">
             <Cleave
@@ -94,7 +98,11 @@ const CreditCard = ({
           )}
         </div>
       </div>
-      <div className="required field">
+      <div
+        className={`required field ${
+          formErrors.expiry.length > 0 ? "error" : ""
+        }`}
+      >
         <label>Valid thru (mm/yy)</label>
         <div className="two wide field">
           <Cleave
@@ -108,7 +116,11 @@ const CreditCard = ({
           <span className="errorMessage">{formErrors.expiry}</span>
         )}
       </div>
-      <div className="required field ">
+      <div
+        className={`required field ${
+          formErrors.name.length > 0 ? "error" : ""
+        }`}
+      >
         <label>Cardholder's name</label>
         <input type="text" onChange={onChange} name="name"></input>
         {formErrors.name.length > 0 && (

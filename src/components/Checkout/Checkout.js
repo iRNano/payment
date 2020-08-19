@@ -93,8 +93,8 @@ const Checkout = () => {
         <div>
           {isSuccess ? (
             <div className={`ui ${success} message  `}>
-              <div className="header">Form Completed</div>
-              <p>You're all signed up for the newsletter.</p>
+              <div className="header">Success</div>
+              <p>Thank you for your purchase! Order has been placed.</p>
             </div>
           ) : null}
           {isSuccess === false ? (
